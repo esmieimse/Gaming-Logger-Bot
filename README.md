@@ -34,7 +34,7 @@ PCで「いつ」「どのくらい」「どのゲーム」をプレイしたの
 
 ### 2) Glitchのプロジェクトを作成する
 - Glitchで`New Project` > `Import from Github`をクリックし、ポップアップ画面に下記URLをコピペ  
-UUUUUUUUUUUUUURLLLLLLLLLLLLLLLLLLLLLLLLLL
+https://github.com/esmieimse/Gaming-Logger-Bot
   
 - Importが成功したら`.env`を開き、DISCORD_BOT_TOKEN, USER_ID, CHANNEL_IDを入力  
 このとき GAS_URL はまだ空欄でOK
