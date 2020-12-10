@@ -1,0 +1,22 @@
+{
+  "name": "glitch-discord-bot",
+  "version": "0.0.0",
+  "description": "steam-logger discord bot on Glitch",
+  "main": "main.js",
+  "dependencies": {
+    "discord.js": "latest",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.31",
+    "querystring": "^0.2.0",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node main.js",
+    "test": "node main.js"
+  },
+  "engines": {
+    "node": "12.x"
+  }
+}
