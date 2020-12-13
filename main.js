@@ -9,6 +9,9 @@ const querystring = require("querystring");
 
 moment.tz.setDefault("Asia/Tokyo");
 
+// 記録開始時刻をログ出力まで保持しておくための変数
+let start = undefined;
+
 
 client.on("ready", message => {
   console.log("bot is ready!");
@@ -16,58 +19,69 @@ client.on("ready", message => {
 
 
 // Steamのプレイログを出力する
-client.on("presenceUpdate", (oldPresence, newPresence) => {
+client.on("presenceUpdate", (oldPresence, newPresence) => { 
   if (newPresence.userID == process.env.USER_ID) {
-    if (!oldPresence.activities) return false;
+    if (!oldPresence.activities[0]) return false;
 
     oldPresence.activities.forEach(activity => {
       if (activity.type == "PLAYING") {
-        let start = activity.createdTimestamp;
-        let end = Date.now();
-        let playtime = moment.duration(end - start);
-
-        // プレイログをDiscordに出力
-        if (playtime.hours() == 0) {
-          client.channels.cache
-            .get(process.env.CHANNEL_ID)
-            .send(`${activity.name}を${playtime.minutes()}分プレイしました`);
-        } else {
-          client.channels.cache
-            .get(process.env.CHANNEL_ID)
-            .send(`${activity.name}を${playtime.hours()}時間${playtime.minutes()}分プレイしました`);
-        }
-
-        // プレイログをspreadsheetに出力
-        let hour = playtime.hours();
-        let minute = ("00" + playtime.minutes()).slice(-2);
-        let second = ("00" + playtime.seconds()).slice(-2);
-
-        let startDate = moment(start).format("YYYY/MM/DD HH:mm:ss");
-        let endDate = moment(end).format("YYYY/MM/DD HH:mm:ss");
-
-        let url = process.env.GAS_URL;
-
-        // spreadsheet URLにパラメータを付加
-        url = `${url}?game=${activity.name}&playtime=${hour}:${minute}:${second}&start=${startDate}&end=${endDate}`;
-
-        // 文字コードの変換
-        url = encodeURI(url);
-
-        // API通信
-        const doApi = async () => {
-          try {
-            const result = await requestPromise({
-              uri: url,
-              method: "GET"
-            });
-          } catch (error) {
-            console.log("Error message: " + error.message);
+        // 現在もプレイ中である場合（activity.detailsとかが変わるとpresenceUpdateのトリガーがかかる）
+        newPresence.activities.forEach(newActivity => {
+          if (start == undefined) {
+            start = activity.createdTimestamp;
           }
-        };
+        });
+        
+        // プレイしていたゲームが終了した場合
+        if (!newPresence.activities[0]) {
+          if (start == undefined) {
+              start = activity.createdTimestamp;
+          }
+          let end = Date.now();
+          let playtime = moment.duration(end - start);
 
-        // 実行
-        doApi();
-      }
+          // プレイログをDiscordに出力
+          if (playtime.hours() == 0) {
+            client.channels.cache.get(process.env.CHANNEL_ID).send(`${activity.name}を${playtime.minutes()}分プレイしました`);
+          } else {
+            client.channels.cache.get(process.env.CHANNEL_ID).send(`${activity.name}を${playtime.hours()}時間${playtime.minutes()}分プレイしました`);
+          }
+          
+          // プレイログをspreadsheetに出力
+          let hour = playtime.hours();
+          let minute = ("00" + playtime.minutes()).slice(-2);
+          let second = ("00" + playtime.seconds()).slice(-2);
+
+          let startDate = moment(start).format("YYYY/MM/DD HH:mm:ss");
+          let endDate = moment(end).format("YYYY/MM/DD HH:mm:ss");
+
+          let url = process.env.GAS_URL;
+
+          // spreadsheet URLにパラメータを付加
+          url = `${url}?game=${activity.name}&playtime=${hour}:${minute}:${second}&start=${startDate}&end=${endDate}`;
+
+          // 文字コードの変換
+          url = encodeURI(url);
+
+          // API通信
+          const doApi = async () => {
+            try {
+              const result = await requestPromise({
+                uri: url,
+                method: "GET"
+              });
+            } catch (error) {
+              console.log("Error message: " + error.message);
+            }
+          };
+
+          // 実行
+          doApi();
+          
+          // 変数の初期化
+          start = undefined;
+          }
+        } 
     });
   }
 });
@@ -123,6 +137,6 @@ if (process.env.CHANNEL_ID == undefined) {
 }
 
 if (process.env.GAS_URL == undefined) {
-  console.log("please set ENV: GAS_URL\nOR if you don't want to record playlog in spreadsheet, please comment out lines 42-70");
+  console.log("please set ENV: GAS_URL\nOR if you don't want to record playlog in spreadsheet, please comment out lines 42-70 and here.");
   process.exit(0);
 }
