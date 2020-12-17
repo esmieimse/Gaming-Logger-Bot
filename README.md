@@ -15,8 +15,9 @@ PCで「いつ」「どのくらい」「どのゲーム」をプレイしたの
 そのため、サーバーに導入する場合は各自でBotをつくる必要があります
 
 以下にBot準備についての簡単な説明、詳細に関しては下記リンクの記事に書いたので、これら等を参考に各種設定を行ってみてください  
-[PCゲームのプレイ記録を出力するDiscord Botの導入#1　GlitchでBotを動かす](https://esmie.hateblo.jp/entry/gaming-logger1)
-[PCゲームのプレイ記録を出力するDiscord Botの導入#2　GlitchとGASの連携](https://esmie.hateblo.jp/entry/gaming-logger2)
+[PCゲームのプレイ記録を出力するDiscord Botの導入#1　GlitchでBotを動かす](https://esmie.hateblo.jp/entry/gaming-logger1)  
+[PCゲームのプレイ記録を出力するDiscord Botの導入#2　GlitchとGASの連携](https://esmie.hateblo.jp/entry/gaming-logger2)  
+[PCゲームのプレイ記録を出力するDiscord Botの導入#3　出力ログのカスタマイズ](https://esmie.hateblo.jp/entry/gaming-logger3)
 
 ## 全体の構成図
 
