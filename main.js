@@ -40,6 +40,14 @@ client.on("presenceUpdate", (oldPresence, newPresence) => {
           let end = Date.now();
           let playtime = moment.duration(end - start);
 
+          let hour = playtime.hours();
+          let minute = ("00" + playtime.minutes()).slice(-2);
+          let second = ("00" + playtime.seconds()).slice(-2);
+
+          let startDate = moment(start).format("YYYY/MM/DD HH:mm:ss");
+          let endDate = moment(end).format("YYYY/MM/DD HH:mm:ss");
+
+
           // プレイログをDiscordに出力
           if (playtime.hours() == 0) {
             client.channels.cache.get(process.env.CHANNEL_ID).send(`${activity.name}を${playtime.minutes()}分プレイしました`);
@@ -48,13 +56,6 @@ client.on("presenceUpdate", (oldPresence, newPresence) => {
           }
           
           // プレイログをspreadsheetに出力
-          let hour = playtime.hours();
-          let minute = ("00" + playtime.minutes()).slice(-2);
-          let second = ("00" + playtime.seconds()).slice(-2);
-
-          let startDate = moment(start).format("YYYY/MM/DD HH:mm:ss");
-          let endDate = moment(end).format("YYYY/MM/DD HH:mm:ss");
-
           let url = process.env.GAS_URL;
 
           // spreadsheet URLにパラメータを付加
