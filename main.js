@@ -138,6 +138,6 @@ if (process.env.CHANNEL_ID == undefined) {
 }
 
 if (process.env.GAS_URL == undefined) {
-  console.log("please set ENV: GAS_URL\nOR if you don't want to record playlog in spreadsheet, please comment out lines 42-70 and here.");
+  console.log("please set ENV: GAS_URL\nOR if you don't want to record playlog in spreadsheet, please comment out lines 59-80 and here.");
   process.exit(0);
 }

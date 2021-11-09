@@ -4,7 +4,7 @@
   "description": "steam-logger discord bot on Glitch",
   "main": "main.js",
   "dependencies": {
-    "discord.js": "latest",
+    "discord.js": "^12.5.1",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.31",
     "querystring": "^0.2.0",
